@@ -10,7 +10,7 @@ on:
 #        default: 'main'
 
 jobs:
-  validate-protobuf:
+  check:
     runs-on: ubuntu-22.04
     container: gcr.io/gapic-images/googleapis:20230301
     strategy:
