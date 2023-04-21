@@ -1,4 +1,4 @@
-name: Protobuf check with googleapis code generation
+name: Protobuf code generation check
 on:
   schedule:
   - cron: '0 1 * * *'
@@ -7,7 +7,7 @@ on:
       protobuf-ref:
         description: 'Protobuf Git ref (e.g. v22.3,)'
         required: true
-        default: 'master'
+        default: 'main'
 
 jobs:
   validate-protobuf:
