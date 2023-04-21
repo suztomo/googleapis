@@ -14,18 +14,26 @@ jobs:
     runs-on: ubuntu-22.04
     container: gcr.io/gapic-images/googleapis:20230301
     steps:
+    - name: Checkout master of googleapis
+      uses: actions/checkout@v3
+      with:
+        path: googleapis
     - name: Checkout Protobuf with specified Git ref "${{ github.event.inputs.protobuf-ref }}"
       uses: actions/checkout@v3
       with:
         repository: 'protocolbuffers/protobuf'
         ref: ${{ github.event.inputs.protobuf-ref }}
-    - name: Checkout master of googleapis
-      uses: actions/checkout@v3
+        path: protobuf
     - name: Run code generation Bazel command with the Protobuf
       shell: bash
       run: |
+        echo "working directory: $(pwd)"
+        echo "GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}"
+        echo "ls"
+        ls -alt
         echo "Running Bazel with ${GITHUB_WORKSPACE}/protobuf"
-        bazelisk build //google/monitoring/v3:monitoring-v3-py \
-          --override_repository=com_google_protobuf=${GITHUB_WORKSPACE}/protobuf
+        cd googleapis && \
+          bazelisk build //google/monitoring/v3:monitoring-v3-py \
+              --override_repository=com_google_protobuf=${GITHUB_WORKSPACE}/protobuf
 
 
