@@ -3,37 +3,46 @@ on:
   schedule:
   - cron: '0 1 * * *'
   workflow_dispatch:
-    inputs:
-      protobuf-ref:
-        description: 'Protobuf Git ref (e.g. v22.3,)'
-        required: true
-        default: 'main'
+#    inputs:
+#      protobuf-ref:
+#        description: 'Protobuf Git ref (e.g. v22.3,)'
+#        required: true
+#        default: 'main'
 
 jobs:
   validate-protobuf:
     runs-on: ubuntu-22.04
     container: gcr.io/gapic-images/googleapis:20230301
+    strategy:
+      fail-fast: false
+      matrix:
+        protobuf-ref: [main, v22.3, v21.12]
+        googleapis-bazel-target:
+        - //google/monitoring/v3:monitoring-v3-nodejs
+        - //google/monitoring/v3:monitoring-v3-py
+        - //google/monitoring/v3:monitoring-v3-java
+        - //google/monitoring/v3:google-cloud-monitoring-v3-ruby
+        - //google/monitoring/v3:google-cloud-monitoring-v3-csharp
+        - //google/monitoring/v3:google-cloud-monitoring-v3-php
     steps:
     - name: Checkout master of googleapis
       uses: actions/checkout@v3
       with:
         path: googleapis
-    - name: Checkout Protobuf with specified Git ref "${{ github.event.inputs.protobuf-ref }}"
+    - name: Checkout Protobuf with specified Git ref "${{ matrix.protobuf-ref }}"
       uses: actions/checkout@v3
       with:
         repository: 'protocolbuffers/protobuf'
-        ref: ${{ github.event.inputs.protobuf-ref }}
+        ref: ${{ matrix.protobuf-ref }}
         path: protobuf
     - name: Run code generation Bazel command with the Protobuf
       shell: bash
       run: |
         echo "working directory: $(pwd)"
         echo "GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}"
-        echo "ls"
-        ls -alt
         echo "Running Bazel with ${GITHUB_WORKSPACE}/protobuf"
         cd googleapis && \
-          bazelisk build //google/monitoring/v3:monitoring-v3-py \
+          bazelisk build ${{ matrix.googleapis-bazel-target }} \
               --override_repository=com_google_protobuf=${GITHUB_WORKSPACE}/protobuf
 
 
