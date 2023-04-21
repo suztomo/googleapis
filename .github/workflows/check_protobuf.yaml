@@ -3,10 +3,11 @@ on:
   schedule:
   - cron: '0 1 * * *'
   workflow_dispatch:
-    protobuf-ref:
-      description: 'Protobuf Git ref (e.g. v22.3,)'
-      required: true
-      default: 'master'
+    inputs:
+      protobuf-ref:
+        description: 'Protobuf Git ref (e.g. v22.3,)'
+        required: true
+        default: 'master'
 
 jobs:
   validate-protobuf:
