@@ -20,7 +20,7 @@ jobs:
         googleapis-bazel-target:
         - //google/monitoring/v3:monitoring-v3-nodejs
         - //google/monitoring/v3:monitoring-v3-py
-        - //google/monitoring/v3:monitoring-v3-java
+        - //google/monitoring/v3:google-cloud-monitoring-v3-java
         - //google/monitoring/v3:google-cloud-monitoring-v3-ruby
         - //google/monitoring/v3:google-cloud-monitoring-v3-csharp
         - //google/monitoring/v3:google-cloud-monitoring-v3-php
