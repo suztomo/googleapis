@@ -24,6 +24,7 @@ jobs:
         - //google/monitoring/v3:google-cloud-monitoring-v3-ruby
         - //google/monitoring/v3:google-cloud-monitoring-v3-csharp
         - //google/monitoring/v3:google-cloud-monitoring-v3-php
+        - //google/actions/type:date_range_py_proto
     steps:
     - name: Checkout master of googleapis
       uses: actions/checkout@v3
