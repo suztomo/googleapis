@@ -41,7 +41,7 @@ jobs:
       shell: bash
       run: |
         echo "working directory: $(pwd)"
-        "git log -1:"
+        echo "git log -1:"
         git log -1
     - name: Run code generation bazel build ${{ matrix.googleapis-bazel-target }}
       shell: bash
