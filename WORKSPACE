@@ -79,9 +79,9 @@ rules_pkg_dependencies()
 
 http_archive(
     name = "com_google_protobuf",
-    sha256 = "930c2c3b5ecc6c9c12615cf5ad93f1cd6e12d0aba862b572e076259970ac3a53",
-    strip_prefix = "protobuf-3.21.12",
-    urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.21.12.tar.gz"],
+    sha256 = "786bf22c8fd3f20b7242df3b9649900714b0ba77b24a4971573088f41dfe9f8a",
+    strip_prefix = "protobuf-22.3",
+    urls = ["https://github.com/protocolbuffers/protobuf/archive/v22.3.tar.gz"],
 )
 
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
