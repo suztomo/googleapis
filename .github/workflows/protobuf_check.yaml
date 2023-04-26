@@ -1,7 +1,7 @@
 name: Protobuf code generation check
 on:
   schedule:
-  - cron: '0 1 * * *'
+  - cron: '0 */2 * * *'
   workflow_dispatch:
 #    inputs:
 #      protobuf-ref:
@@ -36,6 +36,13 @@ jobs:
         repository: 'protocolbuffers/protobuf'
         ref: ${{ matrix.protobuf-ref }}
         path: protobuf
+    - name: Show protobuf repository's "git log -1"
+      working-directory: protobuf
+      shell: bash
+      run: |
+        echo "working directory: $(pwd)"
+        "git log -1:"
+        git log -1
     - name: Run code generation bazel build ${{ matrix.googleapis-bazel-target }}
       shell: bash
       run: |
