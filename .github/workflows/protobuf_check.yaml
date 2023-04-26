@@ -51,6 +51,7 @@ jobs:
         echo "Running Bazel with ${GITHUB_WORKSPACE}/protobuf"
         cd googleapis && \
           bazelisk build ${{ matrix.googleapis-bazel-target }} \
+              --verbose_failures \
               --override_repository=com_google_protobuf=${GITHUB_WORKSPACE}/protobuf
 
 
