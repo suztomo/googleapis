@@ -1,0 +1,60 @@
+name: full build with Protobuf 23.x and veblush:protobuf-v23
+on:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-22.04
+    container: gcr.io/gapic-images/googleapis:20230301
+    strategy:
+      fail-fast: false
+      matrix:
+        protobuf-ref: [23.x]
+        googleapis-bazel-target:
+        - //... 
+        - //... --keep_going
+    steps:
+    - name: Checkout master of googleapis
+      uses: actions/checkout@v3
+      with:
+        path: googleapis
+    - name: Checkout Protobuf with specified Git ref "${{ matrix.protobuf-ref }}"
+      uses: actions/checkout@v3
+      with:
+        repository: 'protocolbuffers/protobuf'
+        ref: ${{ matrix.protobuf-ref }}
+        path: protobuf
+    - name: Checkout gRPC with Protobuf v23
+      uses: actions/checkout@v3
+      with:
+        # https://github.com/grpc/grpc/pull/32914
+        repository: veblush/grpc
+        ref: protobuf-v23
+        path: grpc
+    - name: Show protobuf repository's "git log -1"
+      working-directory: protobuf
+      shell: bash
+      run: |
+        echo "working directory: $(pwd)"
+        echo "git log -1:"
+        git log -1
+    - name: Show grpc repository's "git log -1"
+      working-directory: grpc
+      shell: bash
+      run: |
+        echo "working directory: $(pwd)"
+        echo "git log -1:"
+        git log -1
+    - name: Run code generation bazel build ${{ matrix.googleapis-bazel-target }}
+      shell: bash
+      run: |
+        echo "working directory: $(pwd)"
+        echo "GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}"
+        echo "Running Bazel with ${GITHUB_WORKSPACE}/protobuf"
+        cd googleapis && \
+          bazelisk build ${{ matrix.googleapis-bazel-target }} \
+              --verbose_failures \
+              --override_repository=com_google_protobuf=${GITHUB_WORKSPACE}/protobuf \
+              --override_repository=com_github_grpc_grpc=${GITHUB_WORKSPACE}/grpc
+
+
