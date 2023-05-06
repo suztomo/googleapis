@@ -10,9 +10,6 @@ jobs:
       fail-fast: false
       matrix:
         protobuf-ref: [23.x]
-        googleapis-bazel-target:
-        - //... 
-        - //... --keep_going
     steps:
     - name: Checkout master of googleapis
       uses: actions/checkout@v3
@@ -47,14 +44,16 @@ jobs:
         git log -1
     - name: Run code generation bazel build ${{ matrix.googleapis-bazel-target }}
       shell: bash
+      working-directory: googleapis
       run: |
         echo "working directory: $(pwd)"
         echo "GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}"
         echo "Running Bazel with ${GITHUB_WORKSPACE}/protobuf"
-        cd googleapis && \
-          bazelisk build ${{ matrix.googleapis-bazel-target }} \
-              --verbose_failures \
-              --override_repository=com_google_protobuf=${GITHUB_WORKSPACE}/protobuf \
-              --override_repository=com_github_grpc_grpc=${GITHUB_WORKSPACE}/grpc
+        targets=$(bazelisk query 'filter("-(go|csharp|java|php|ruby|nodejs|py)$", kind("rule", //...:*))' \
+            | grep -v -E ":(proto|grpc|gapic)-.*-java$")
+        bazelisk build --verbose_failures --keep_going \
+            --override_repository=com_google_protobuf=${GITHUB_WORKSPACE}/protobuf \
+            --override_repository=com_github_grpc_grpc=${GITHUB_WORKSPACE}/grpc \
+            $targets
 
 
