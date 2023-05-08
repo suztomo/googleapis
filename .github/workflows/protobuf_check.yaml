@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        protobuf-ref: [main, 23.x, v23.0-rc2, v21.12]
+        protobuf-ref: [main, 23.x, v21.12]
         googleapis-bazel-target:
         - //google/monitoring/v3:monitoring-v3-nodejs
         - //google/monitoring/v3:monitoring-v3-py
@@ -55,7 +55,7 @@ jobs:
       with:
         path: |
           ~/.cache/bazel
-        key: ${{ runner.os }}-bazel-${{ hashFiles('.bazelversion', '.bazelrc', 'WORKSPACE', 'WORKSPACE.bazel', 'MODULE.bazel') }}
+        key: ${{ runner.os }}-bazel-${{ hashFiles('grpc/WORKSPACE', 'googleapis/WORKSPACE', 'protobuf/WORKSPACE') }}
         restore-keys: |
           ${{ runner.os }}-bazel-
     - name: Run code generation bazel build ${{ matrix.googleapis-bazel-target }}
