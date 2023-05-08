@@ -57,7 +57,7 @@ jobs:
           ~/.cache/bazel
         key: ${{ runner.os }}-bazel-${{ hashFiles('grpc/WORKSPACE', 'googleapis/WORKSPACE', 'protobuf/WORKSPACE') }}
         restore-keys: |
-          ${{ runner.os }}-bazel-
+          ${{ runner.os }}-bazel-${{ hashFiles('grpc/WORKSPACE', 'googleapis/WORKSPACE', 'protobuf/WORKSPACE') }}
     - name: Run code generation bazel build ${{ matrix.googleapis-bazel-target }}
       shell: bash
       run: |
