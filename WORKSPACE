@@ -158,9 +158,15 @@ apple_support_dependencies()
 # instantiated in grpc_deps().
 http_archive(
     name = "com_google_protobuf",
+<<<<<<< HEAD
     sha256 = "dc167b7d23ec0d6e4a3d4eae1798de6c8d162e69fa136d39753aaeb7a6e1289d",
     strip_prefix = "protobuf-23.1",
     urls = ["https://github.com/protocolbuffers/protobuf/archive/v23.1.tar.gz"],
+=======
+    sha256 = "b8faf8487cc364e5c2b47a9abd77512bc79a6389ea45392ca938ba7617eae877",
+    strip_prefix = "protobuf-23.0",
+    urls = ["https://github.com/protocolbuffers/protobuf/archive/v23.0.tar.gz"],
+>>>>>>> 9e9a46865 (Protobuf 23)
 )
 
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps", "PROTOBUF_MAVEN_ARTIFACTS")
