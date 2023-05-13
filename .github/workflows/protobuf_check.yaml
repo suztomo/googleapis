@@ -1,7 +1,7 @@
 name: Protobuf code generation check
 on:
   schedule:
-  - cron: '0 */2 * * *'
+  - cron: '0 */4 * * MON,TUE,WED,THU,FRI'
   workflow_dispatch:
 #    inputs:
 #      protobuf-ref:
