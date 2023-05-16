@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        protobuf-ref: [main, 23.x, v21.12]
+        protobuf-ref: [main, 23.x]
         googleapis-bazel-target:
         - //google/monitoring/v3:monitoring-v3-nodejs
         - //google/monitoring/v3:monitoring-v3-py
@@ -39,12 +39,18 @@ jobs:
     - name: Checkout gRPC with Protobuf v23
       uses: actions/checkout@v3
       with:
-        # https://github.com/grpc/grpc/pull/32914
-        repository: veblush/grpc
-        ref: protobuf-v23
+        repository: grpc/grpc
+        ref: v1.55.x
         path: grpc
     - name: Show protobuf repository's "git log -1"
       working-directory: protobuf
+      shell: bash
+      run: |
+        echo "working directory: $(pwd)"
+        echo "git log -1:"
+        git log -1
+    - name: Show grpc repository's "git log -1"
+      working-directory: grpc
       shell: bash
       run: |
         echo "working directory: $(pwd)"
