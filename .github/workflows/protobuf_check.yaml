@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        protobuf-ref: [main, v23.1]
+        protobuf-ref: [main, 23.x]
         googleapis-bazel-target:
         - //google/monitoring/v3:monitoring-v3-nodejs
         - //google/monitoring/v3:monitoring-v3-py
@@ -40,7 +40,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         repository: grpc/grpc
-        ref: v1.55.0-pre2
+        ref: v1.55.0
         path: grpc
     - name: Show protobuf repository's "git log -1"
       working-directory: protobuf
@@ -73,7 +73,7 @@ jobs:
         cd googleapis && \
           bazelisk build ${{ matrix.googleapis-bazel-target }} \
               --verbose_failures \
-              --override_repository=com_google_protobuf=${GITHUB_WORKSPACE}/protobuf \
-              --override_repository=com_github_grpc_grpc=${GITHUB_WORKSPACE}/grpc
+              --override_repository=com_google_protobuf=${GITHUB_WORKSPACE}/protobuf
+        #      --override_repository=com_github_grpc_grpc=${GITHUB_WORKSPACE}/grpc
 
 
