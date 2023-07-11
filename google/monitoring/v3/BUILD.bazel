@@ -17,6 +17,7 @@ package(default_visibility = ["//visibility:public"])
 ##############################################################################
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@com_google_googleapis_imports//:imports.bzl", "proto_library_with_info")
+load("//:java_action_test.bzl", "jar_counter")
 
 proto_library(
     name = "monitoring_proto",
@@ -84,6 +85,11 @@ load(
 java_proto_library(
     name = "monitoring_java_proto",
     deps = [":monitoring_proto"],
+)
+
+jar_counter(
+    name = "monitoring_class_count",
+    inputs = [":monitoring_java_proto"],
 )
 
 java_grpc_library(

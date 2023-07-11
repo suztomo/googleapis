@@ -3,3 +3,9 @@ alias(
     actual = "@rules_gapic//bazel:build_file_generator",
 )
 
+java_binary(
+    name = "count_class_files",
+    srcs = ["CountClassFiles.java"],
+    main_class = "CountClassFiles",
+    visibility = ["//visibility:public"],
+)
