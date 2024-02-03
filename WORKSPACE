@@ -93,11 +93,22 @@ load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 
 rules_pkg_dependencies()
 
+
+# From https://github.com/protocolbuffers/protobuf/blob/v23.2/protobuf_deps.bzl#L151
+http_archive(
+    name = "upb_old",
+    urls = ["https://github.com/protocolbuffers/upb/archive/e8161b8d42d057a95cf38ea7bce223f84f24a656.zip"],
+    strip_prefix = "upb-e8161b8d42d057a95cf38ea7bce223f84f24a656",
+    sha256 = "8de5c7e3210687fcea2d0a18e1ba1bca1f1f3a042e1f0bac06d93a12391c0050",
+    patches = ["@com_google_protobuf_old//build_defs:upb.patch"],
+)
+
 http_archive(
     name = "com_google_protobuf_old",
     sha256 = "0b0395d34e000f1229679e10d984ed7913078f3dd7f26cf0476467f5e65716f4",
     strip_prefix = "protobuf-23.2",
     urls = ["https://github.com/protocolbuffers/protobuf/archive/v23.2.tar.gz"],
+    repo_mapping = {"@upb": "@upb_old"}
 )
 
 # This must be above the download of gRPC (in C++ section) and
