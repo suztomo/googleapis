@@ -93,7 +93,14 @@ load("@rules_pkg//:deps.bzl", "rules_pkg_dependencies")
 
 rules_pkg_dependencies()
 
-# This must be above the download of gRPC (in C++ section) and 
+http_archive(
+    name = "com_google_protobuf_old",
+    sha256 = "0b0395d34e000f1229679e10d984ed7913078f3dd7f26cf0476467f5e65716f4",
+    strip_prefix = "protobuf-23.2",
+    urls = ["https://github.com/protocolbuffers/protobuf/archive/v23.2.tar.gz"],
+)
+
+# This must be above the download of gRPC (in C++ section) and
 # rules_gapic_repositories because both depend on rules_go and we need to manage
 # our version of rules_go explicitly rather than depend on the version those
 # bring in transitively.
@@ -106,6 +113,7 @@ http_archive(
         "https://mirror.bazel.build/github.com/bazelbuild/rules_go/releases/download/v{0}/rules_go-v{0}.zip".format(_io_bazel_rules_go_version),
         "https://github.com/bazelbuild/rules_go/releases/download/v{0}/rules_go-v{0}.zip".format(_io_bazel_rules_go_version),
     ],
+    repo_mapping = {"@com_google_protobuf": "@com_google_protobuf_old"}
 )
 
 ##############################################################################
