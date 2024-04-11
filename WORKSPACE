@@ -17,7 +17,7 @@ switched_rules_by_language(
     gapic = True,
     go = True,
     grpc = True,
-    java = True,
+    java = False,
     nodejs = True,
     php = True,
     python = True,
@@ -254,67 +254,6 @@ gazelle_dependencies()
 load("@rules_gapic//:repositories.bzl", "rules_gapic_repositories")
 
 rules_gapic_repositories()
-
-##############################################################################
-# Java
-##############################################################################
-
-# Starting in protobuf 3.19, protobuf project started to provide
-# PROTOBUF_MAVEN_ARTIFACTS variable so that Bazel users can resolve their
-# dependencies through maven_install.
-# https://github.com/protocolbuffers/protobuf/issues/9132
-
-load("@rules_jvm_external//:defs.bzl", "maven_install")
-
-maven_install(
-    artifacts = PROTOBUF_MAVEN_ARTIFACTS,
-    generate_compat_repositories = True,
-    repositories = [
-        "https://repo.maven.apache.org/maven2/",
-    ],
-)
-
-_gapic_generator_java_version = "2.38.1"
-
-maven_install(
-    artifacts = [
-        "com.google.api:gapic-generator-java:" + _gapic_generator_java_version,
-    ],
-    #Update this False for local development
-    fail_on_missing_checksum = True,
-    repositories = [
-        "m2Local",
-        "https://repo.maven.apache.org/maven2/",
-    ]
-)
-
-http_archive(
-    name = "gapic_generator_java",
-    strip_prefix = "sdk-platform-java-%s" % _gapic_generator_java_version,
-    urls = ["https://github.com/googleapis/sdk-platform-java/archive/v%s.zip" % _gapic_generator_java_version],
-)
-
-# gax-java is part of sdk-platform-java repository
-http_archive(
-    name = "com_google_api_gax_java",
-    strip_prefix = "sdk-platform-java-%s/gax-java" % _gapic_generator_java_version,
-    urls = ["https://github.com/googleapis/sdk-platform-java/archive/v%s.zip" % _gapic_generator_java_version],
-)
-
-load("@com_google_api_gax_java//:repository_rules.bzl", "com_google_api_gax_java_properties")
-
-com_google_api_gax_java_properties(
-    name = "com_google_api_gax_java_properties",
-    file = "@com_google_api_gax_java//:dependencies.properties",
-)
-
-load("@com_google_api_gax_java//:repositories.bzl", "com_google_api_gax_java_repositories")
-
-com_google_api_gax_java_repositories()
-
-load("@io_grpc_grpc_java//:repositories.bzl", "grpc_java_repositories")
-
-grpc_java_repositories()
 
 ##############################################################################
 # Python
